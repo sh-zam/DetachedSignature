@@ -1,0 +1,31 @@
+language: rust
+rust: stable
+cache: cargo
+sudo: required
+env:
+  global:
+  - PROJECT: torchbear
+matrix:
+  include:
+  - os: linux
+    rust: stable
+    env:
+    - ARCH=x86_64
+    - PLATFORM=linux
+    - CHANNEL=stable
+    services: docker
+    script: echo "cargo test temporarily disabled"
+    before_deploy:
+    - chmod +x torchbear
+    - ./torchbear &
+deploy:
+  provider: releases
+  api_key:
+    secure: CCGOaag0OKfeYkuJndDnb8K7zbGsIqRyKb0iNM2QBiuotzMAwZIe4phHHVFweGhma+0Xim/pwhGXFOBosxmnlAc+bWltpMamSQPDbHMXaq2e8OpkE2K8XvLC8xz3emfzE2zuCiR5hEPL7v9nYayE0Q6fBH02/J5Z6pDk4O2pmbARuNs03NXKzguThJurWSj+bNvKZX3DqUpy6FawpY7R/kUUfDz3bW/ktArGeVwL1CnpRSEpWSsOw6cpXH6eNJM7x1me1DeXUp4z5PwxgxR7MI/Dm65/X5GdmycC/H2HDK6waAVOwEXF6m+3se9LXhKr8gwfGlDjPuCO8NSoUE2uYD4xM4QIcLPIM8c6gKjId50DiLc+jpMJNnDAP+U2k7LC9jBgt7HEtz6AZgyddkZbGUefM3vFL3LKZjNI5b8ilFMfJ/GgM0Z8A2Ag0y/IcKurwbe/5+RpOE9YqYjnM3VtQPW8KcFRR6ybimTfD3QSlEZHiAbWiXdu5+ZwAbEQ5GIFs4wUFQUi7QQqfgjUDcSA9KI7hv7HrtGlA/aNo77AsOUaBGyJF9KGpSGQecJK1SWZdALowIlut/JDqg7dRkxcsGi+prhYDMgGPV0cN749+5EnxOEDHA7oBJhL+4Wsu3R+50lSfPGVIsRZSSQM82E1c7iId0UDFX52OGaoqXHIiPo=
+    skip_cleanup: true
+  file: torchbear.sig
+  on:
+    repo: sh-zam/DetachedSignature
+before_install:
+- openssl aes-256-cbc -K $encrypted_a26db6816c6c_key -iv $encrypted_a26db6816c6c_iv
+  -in private_key.enc -out private_key -d
